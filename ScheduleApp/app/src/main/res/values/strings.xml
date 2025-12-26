@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">일정관리</string>
+    
+    <!-- Navigation -->
+    <string name="nav_list">List</string>
+    <string name="nav_calendar">Calendar</string>
+    <string name="nav_note">Note</string>
+    <string name="nav_photo">Photo</string>
+    <string name="nav_setting">Setting</string>
+    
+    <!-- List Screen -->
+    <string name="list_title">일정 목록</string>
+    <string name="list_empty">등록된 일정이 없습니다</string>
+    <string name="list_add_schedule">일정 추가</string>
+    <string name="list_filter_time">시간순</string>
+    <string name="list_filter_priority">우선순위순</string>
+    
+    <!-- Schedule -->
+    <string name="schedule_title">제목</string>
+    <string name="schedule_title_required">제목 (필수)</string>
+    <string name="schedule_description">설명</string>
+    <string name="schedule_description_optional">설명 (선택)</string>
+    <string name="schedule_date">날짜</string>
+    <string name="schedule_time">시간</string>
+    <string name="schedule_priority">우선순위</string>
+    <string name="schedule_alarm">알람</string>
+    <string name="schedule_save">저장</string>
+    <string name="schedule_cancel">취소</string>
+    <string name="schedule_delete">삭제</string>
+    <string name="schedule_edit">수정</string>
+    
+    <!-- Priority -->
+    <string name="priority_high">높음</string>
+    <string name="priority_medium">보통</string>
+    <string name="priority_low">낮음</string>
+    
+    <!-- Calendar Screen -->
+    <string name="calendar_title">캘린더</string>
+    <string name="calendar_monthly">월간</string>
+    <string name="calendar_weekly">주간</string>
+    <string name="calendar_daily">일간</string>
+    
+    <!-- Note Screen -->
+    <string name="note_title">노트</string>
+    <string name="note_empty">작성된 노트가 없습니다</string>
+    <string name="note_add">노트 추가</string>
+    <string name="note_placeholder">아이디어나 할 일을 자유롭게 작성하세요...</string>
+    <string name="note_add_date">날짜 추가</string>
+    
+    <!-- Photo Screen -->
+    <string name="photo_title">사진</string>
+    <string name="photo_empty">등록된 사진이 없습니다</string>
+    <string name="photo_add">사진 추가</string>
+    <string name="photo_add_memo">메모 추가</string>
+    
+    <!-- Setting Screen -->
+    <string name="setting_title">설정</string>
+    <string name="setting_security">보안</string>
+    <string name="setting_password">비밀번호 잠금</string>
+    <string name="setting_password_desc">앱 실행 시 비밀번호 입력</string>
+    <string name="setting_backup">백업</string>
+    <string name="setting_export">데이터 내보내기</string>
+    <string name="setting_import">데이터 가져오기</string>
+    <string name="setting_about">정보</string>
+    <string name="setting_version">버전</string>
+    
+    <!-- Common -->
+    <string name="confirm">확인</string>
+    <string name="cancel">취소</string>
+    <string name="delete">삭제</string>
+    <string name="edit">수정</string>
+    <string name="save">저장</string>
+    <string name="close">닫기</string>
+    <string name="today">오늘</string>
+</resources>

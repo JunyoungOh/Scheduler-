@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors (K-App Style) -->
+    <color name="primary">#3182F6</color>
+    <color name="primary_variant">#1B64DA</color>
+    <color name="on_primary">#FFFFFF</color>
+    
+    <!-- Background -->
+    <color name="background">#FFFFFF</color>
+    <color name="surface">#F2F4F6</color>
+    <color name="card_background">#FFFFFF</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#191F28</color>
+    <color name="text_secondary">#4E5968</color>
+    <color name="text_tertiary">#8E8E93</color>
+    
+    <!-- Status Colors -->
+    <color name="error">#F04452</color>
+    <color name="success">#00D082</color>
+    <color name="warning">#FF9500</color>
+    
+    <!-- Priority Colors -->
+    <color name="priority_high">#F04452</color>
+    <color name="priority_medium">#FF9500</color>
+    <color name="priority_low">#00D082</color>
+    
+    <!-- Border & Divider -->
+    <color name="border">#F2F4F6</color>
+    <color name="divider">#E5E8EB</color>
+    
+    <!-- Icon -->
+    <color name="icon_default">#4E5968</color>
+    <color name="icon_active">#3182F6</color>
+</resources>
