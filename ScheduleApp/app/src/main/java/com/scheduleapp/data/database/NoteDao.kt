@@ -3,10 +3,12 @@ package com.scheduleapp.data.database
 import androidx.room.*
 import com.scheduleapp.data.model.Note
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
 
 /**
- * Data Access Object for Note entity
+ * Data Access Object for Note entity.
+ * 
+ * Note: Date linking is now handled through NoteDateLink entity,
+ * not directly in Note. Use NoteDateLinkDao for date-related queries.
  */
 @Dao
 interface NoteDao {
@@ -46,14 +48,6 @@ interface NoteDao {
     """)
     fun getAll(): Flow<List<Note>>
     
-    // Query by linked date (for calendar integration)
-    @Query("SELECT * FROM notes WHERE linkedDate = :date ORDER BY updatedAt DESC")
-    fun getByLinkedDate(date: LocalDate): Flow<List<Note>>
-    
-    // Query notes with linked dates (for calendar)
-    @Query("SELECT * FROM notes WHERE linkedDate IS NOT NULL ORDER BY linkedDate ASC")
-    fun getNotesWithDates(): Flow<List<Note>>
-    
     // Search notes
     @Query("""
         SELECT * FROM notes 
@@ -66,20 +60,4 @@ interface NoteDao {
     // Toggle pin status
     @Query("UPDATE notes SET isPinned = :isPinned, updatedAt = :updatedAt WHERE id = :id")
     suspend fun setPinned(id: Long, isPinned: Boolean, updatedAt: java.time.LocalDateTime = java.time.LocalDateTime.now())
-    
-    // Update linked date
-    @Query("UPDATE notes SET linkedDate = :date, updatedAt = :updatedAt WHERE id = :id")
-    suspend fun setLinkedDate(id: Long, date: LocalDate?, updatedAt: java.time.LocalDateTime = java.time.LocalDateTime.now())
-    
-    // Count notes for a date
-    @Query("SELECT COUNT(*) FROM notes WHERE linkedDate = :date")
-    suspend fun countByDate(date: LocalDate): Int
-    
-    // Get dates that have notes
-    @Query("""
-        SELECT DISTINCT linkedDate FROM notes 
-        WHERE linkedDate IS NOT NULL 
-          AND linkedDate BETWEEN :startDate AND :endDate
-    """)
-    suspend fun getDatesWithNotes(startDate: LocalDate, endDate: LocalDate): List<LocalDate>
 }

@@ -3,6 +3,7 @@ package com.scheduleapp.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scheduleapp.data.model.*
+import com.scheduleapp.data.repository.NoteDateLinkRepository
 import com.scheduleapp.data.repository.NoteRepository
 import com.scheduleapp.data.repository.PhotoRepository
 import com.scheduleapp.data.repository.ScheduleRepository
@@ -43,6 +44,7 @@ data class CalendarUiState(
 class CalendarViewModel @Inject constructor(
     private val scheduleRepository: ScheduleRepository,
     private val noteRepository: NoteRepository,
+    private val dateLinkRepository: NoteDateLinkRepository,
     private val photoRepository: PhotoRepository
 ) : ViewModel() {
     
@@ -63,13 +65,13 @@ class CalendarViewModel @Inject constructor(
                 // Collect dates with items
                 combine(
                     scheduleRepository.getByDateRange(startDate, endDate),
-                    noteRepository.getNotesWithDates(),
+                    dateLinkRepository.getByDateRange(startDate, endDate),
                     photoRepository.getByDateRange(startDate, endDate)
-                ) { schedules, notes, photos ->
+                ) { schedules, dateLinks, photos ->
                     val scheduleDates = schedules.map { it.date }.toSet()
-                    val noteDates = notes.mapNotNull { it.linkedDate }.toSet()
+                    val noteLinkDates = dateLinks.map { it.linkedDate }.toSet()
                     val photoDates = photos.map { it.date }.toSet()
-                    scheduleDates + noteDates + photoDates
+                    scheduleDates + noteLinkDates + photoDates
                 }.collect { datesWithItems ->
                     _uiState.update { it.copy(datesWithItems = datesWithItems, isLoading = false) }
                 }
@@ -82,13 +84,30 @@ class CalendarViewModel @Inject constructor(
             _uiState.map { it.selectedDate }.distinctUntilChanged().collectLatest { date ->
                 combine(
                     scheduleRepository.getByDate(date),
-                    noteRepository.getByLinkedDate(date),
+                    dateLinkRepository.getDisplayByDate(date),
                     photoRepository.getByDate(date)
-                ) { schedules, notes, photos ->
+                ) { schedules, dateLinksDisplay, photos ->
                     val items = mutableListOf<CalendarItem>()
+                    
+                    // Add schedules
                     items.addAll(schedules.map { CalendarItem.ScheduleItem(it) })
-                    items.addAll(notes.map { CalendarItem.NoteItem(it) })
+                    
+                    // Add note date links (with note title from display data)
+                    dateLinksDisplay.forEach { display ->
+                        val dateLink = NoteDateLink(
+                            id = display.dateLinkId,
+                            noteId = display.noteId,
+                            startIndex = 0,
+                            endIndex = 0,
+                            linkedDate = display.linkedDate,
+                            linkedText = display.linkedText
+                        )
+                        items.add(CalendarItem.NoteLinkItem(dateLink, display.noteTitle))
+                    }
+                    
+                    // Add photos
                     items.addAll(photos.map { CalendarItem.PhotoItem(it) })
+                    
                     items
                 }.collect { items ->
                     _uiState.update { it.copy(selectedDateItems = items) }

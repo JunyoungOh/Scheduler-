@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.scheduleapp.data.model.Note
+import com.scheduleapp.data.model.NoteDateLink
 import com.scheduleapp.data.model.Photo
 import com.scheduleapp.data.model.Priority
 import com.scheduleapp.data.model.Schedule
+import com.scheduleapp.data.repository.NoteDateLinkRepository
 import com.scheduleapp.data.repository.NoteRepository
 import com.scheduleapp.data.repository.PhotoRepository
 import com.scheduleapp.data.repository.ScheduleRepository
@@ -28,10 +30,11 @@ import javax.inject.Inject
  * Backup data structure
  */
 data class BackupData(
-    val version: Int = 1,
+    val version: Int = 2,
     val exportedAt: String,
     val schedules: List<ScheduleBackup>,
     val notes: List<NoteBackup>,
+    val noteDateLinks: List<NoteDateLinkBackup>,
     val photos: List<PhotoBackup>
 )
 
@@ -54,10 +57,19 @@ data class NoteBackup(
     val id: Long,
     val title: String,
     val content: String,
-    val linkedDate: String?,
     val isPinned: Boolean,
     val createdAt: String,
     val updatedAt: String
+)
+
+data class NoteDateLinkBackup(
+    val id: Long,
+    val noteId: Long,
+    val startIndex: Int,
+    val endIndex: Int,
+    val linkedDate: String,
+    val linkedText: String,
+    val createdAt: String
 )
 
 data class PhotoBackup(
@@ -90,6 +102,7 @@ class SettingViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val scheduleRepository: ScheduleRepository,
     private val noteRepository: NoteRepository,
+    private val dateLinkRepository: NoteDateLinkRepository,
     private val photoRepository: PhotoRepository
 ) : ViewModel() {
     
@@ -133,11 +146,19 @@ class SettingViewModel @Inject constructor(
                 val notes = noteRepository.getAll().first()
                 val photos = photoRepository.getAll().first()
                 
+                // Collect all date links for all notes
+                val allDateLinks = mutableListOf<NoteDateLink>()
+                notes.forEach { note ->
+                    val links = dateLinkRepository.getByNoteIdSync(note.id)
+                    allDateLinks.addAll(links)
+                }
+                
                 // Convert to backup format
                 val backupData = BackupData(
                     exportedAt = LocalDateTime.now().toString(),
                     schedules = schedules.map { it.toBackup() },
                     notes = notes.map { it.toBackup() },
+                    noteDateLinks = allDateLinks.map { it.toBackup() },
                     photos = photos.map { it.toBackup() }
                 )
                 
@@ -172,17 +193,30 @@ class SettingViewModel @Inject constructor(
                 
                 // Clear existing data
                 scheduleRepository.deleteAll()
+                dateLinkRepository.deleteAll()
                 noteRepository.deleteAll()
                 photoRepository.deleteAll()
+                
+                // Map old note IDs to new IDs
+                val noteIdMap = mutableMapOf<Long, Long>()
+                
+                // Import notes first
+                backupData.notes.forEach { backup ->
+                    val newId = noteRepository.insert(backup.toNote())
+                    noteIdMap[backup.id] = newId
+                }
+                
+                // Import note date links with updated note IDs
+                backupData.noteDateLinks?.forEach { backup ->
+                    val newNoteId = noteIdMap[backup.noteId]
+                    if (newNoteId != null) {
+                        dateLinkRepository.insert(backup.toNoteDateLink(newNoteId))
+                    }
+                }
                 
                 // Import schedules
                 backupData.schedules.forEach { backup ->
                     scheduleRepository.insert(backup.toSchedule())
-                }
-                
-                // Import notes
-                backupData.notes.forEach { backup ->
-                    noteRepository.insert(backup.toNote())
                 }
                 
                 // Import photos
@@ -242,7 +276,6 @@ class SettingViewModel @Inject constructor(
         id = id,
         title = title,
         content = content,
-        linkedDate = linkedDate?.toString(),
         isPinned = isPinned,
         createdAt = createdAt.toString(),
         updatedAt = updatedAt.toString()
@@ -252,10 +285,29 @@ class SettingViewModel @Inject constructor(
         id = 0,
         title = title,
         content = content,
-        linkedDate = linkedDate?.let { LocalDate.parse(it) },
         isPinned = isPinned,
         createdAt = LocalDateTime.parse(createdAt),
         updatedAt = LocalDateTime.parse(updatedAt)
+    )
+    
+    private fun NoteDateLink.toBackup() = NoteDateLinkBackup(
+        id = id,
+        noteId = noteId,
+        startIndex = startIndex,
+        endIndex = endIndex,
+        linkedDate = linkedDate.toString(),
+        linkedText = linkedText,
+        createdAt = createdAt.toString()
+    )
+    
+    private fun NoteDateLinkBackup.toNoteDateLink(newNoteId: Long) = NoteDateLink(
+        id = 0,
+        noteId = newNoteId,
+        startIndex = startIndex,
+        endIndex = endIndex,
+        linkedDate = LocalDate.parse(linkedDate),
+        linkedText = linkedText,
+        createdAt = LocalDateTime.parse(createdAt)
     )
     
     private fun Photo.toBackup() = PhotoBackup(

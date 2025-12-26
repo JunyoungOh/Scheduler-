@@ -3,6 +3,7 @@ package com.scheduleapp.di
 import android.content.Context
 import com.scheduleapp.data.database.AppDatabase
 import com.scheduleapp.data.database.NoteDao
+import com.scheduleapp.data.database.NoteDateLinkDao
 import com.scheduleapp.data.database.PhotoDao
 import com.scheduleapp.data.database.ScheduleDao
 import dagger.Module
@@ -35,6 +36,12 @@ object DatabaseModule {
     @Singleton
     fun provideNoteDao(database: AppDatabase): NoteDao {
         return database.noteDao()
+    }
+    
+    @Provides
+    @Singleton
+    fun provideNoteDateLinkDao(database: AppDatabase): NoteDateLinkDao {
+        return database.noteDateLinkDao()
     }
     
     @Provides

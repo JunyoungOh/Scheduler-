@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PushPin
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Note
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
@@ -159,10 +160,17 @@ private fun NoteHeader(
 @Composable
 private fun NoteListItem(
     note: Note,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    viewModel: NoteViewModel = hiltViewModel()
 ) {
     val dateFormatter = remember { DateTimeFormatter.ofPattern("M월 d일") }
     val timeFormatter = remember { DateTimeFormatter.ofPattern("HH:mm") }
+    
+    // Get date links count
+    var dateLinksCount by remember { mutableStateOf(0) }
+    LaunchedEffect(note.id) {
+        dateLinksCount = viewModel.getDateLinksCount(note.id)
+    }
     
     AppCard(
         onClick = onClick
@@ -176,7 +184,8 @@ private fun NoteListItem(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(AppSpacing.XSmall)
+                    horizontalArrangement = Arrangement.spacedBy(AppSpacing.XSmall),
+                    modifier = Modifier.weight(1f)
                 ) {
                     if (note.isPinned) {
                         Icon(
@@ -194,17 +203,28 @@ private fun NoteListItem(
                     )
                 }
                 
-                // Linked date badge
-                note.linkedDate?.let { date ->
+                // Date links count badge
+                if (dateLinksCount > 0) {
                     Surface(
                         shape = AppShapes.Small,
                         color = AppColors.Primary.copy(alpha = 0.1f)
                     ) {
-                        Text(
-                            text = date.format(dateFormatter),
+                        Row(
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                            style = AppTypography.Caption2.copy(color = AppColors.Primary)
-                        )
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.CalendarMonth,
+                                contentDescription = null,
+                                tint = AppColors.Primary,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Text(
+                                text = dateLinksCount.toString(),
+                                style = AppTypography.Caption2.copy(color = AppColors.Primary)
+                            )
+                        }
                     }
                 }
             }

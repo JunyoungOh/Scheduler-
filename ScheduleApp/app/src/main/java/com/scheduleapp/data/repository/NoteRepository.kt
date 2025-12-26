@@ -3,13 +3,15 @@ package com.scheduleapp.data.repository
 import com.scheduleapp.data.database.NoteDao
 import com.scheduleapp.data.model.Note
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Repository for Note data operations
+ * Repository for Note data operations.
+ * 
+ * Note: Date linking is now handled through NoteDateLinkRepository,
+ * not directly in Note.
  */
 @Singleton
 class NoteRepository @Inject constructor(
@@ -24,12 +26,6 @@ class NoteRepository @Inject constructor(
     
     // Get note by ID as Flow
     fun getByIdFlow(id: Long): Flow<Note?> = noteDao.getByIdFlow(id)
-    
-    // Get notes by linked date
-    fun getByLinkedDate(date: LocalDate): Flow<List<Note>> = noteDao.getByLinkedDate(date)
-    
-    // Get notes with dates (for calendar)
-    fun getNotesWithDates(): Flow<List<Note>> = noteDao.getNotesWithDates()
     
     // Search notes
     fun search(query: String): Flow<List<Note>> = noteDao.search(query)
@@ -52,18 +48,6 @@ class NoteRepository @Inject constructor(
     suspend fun togglePinned(id: Long, isPinned: Boolean) {
         noteDao.setPinned(id, isPinned)
     }
-    
-    // Set linked date
-    suspend fun setLinkedDate(id: Long, date: LocalDate?) {
-        noteDao.setLinkedDate(id, date)
-    }
-    
-    // Get count for a date
-    suspend fun countByDate(date: LocalDate): Int = noteDao.countByDate(date)
-    
-    // Get dates with notes
-    suspend fun getDatesWithNotes(startDate: LocalDate, endDate: LocalDate): List<LocalDate> =
-        noteDao.getDatesWithNotes(startDate, endDate)
     
     // Delete all
     suspend fun deleteAll() = noteDao.deleteAll()

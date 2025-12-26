@@ -484,22 +484,35 @@ private fun CalendarItemRow(
     onNoteClick: (Long) -> Unit,
     onPhotoClick: (Long) -> Unit
 ) {
-    val (icon, iconColor, onClick) = when (item) {
-        is CalendarItem.ScheduleItem -> Triple(
-            Icons.Outlined.EventNote,
-            AppColors.Primary,
-            { onScheduleClick(item.id) }
-        )
-        is CalendarItem.NoteItem -> Triple(
-            Icons.Outlined.Note,
-            AppColors.Warning,
-            { onNoteClick(item.id) }
-        )
-        is CalendarItem.PhotoItem -> Triple(
-            Icons.Outlined.Photo,
-            AppColors.Success,
-            { onPhotoClick(item.id) }
-        )
+    val (icon, iconColor, onClick, typeLabel, subtitle) = when (item) {
+        is CalendarItem.ScheduleItem -> {
+            val schedule = item.schedule
+            Triple5(
+                Icons.Outlined.EventNote,
+                AppColors.Primary,
+                { onScheduleClick(item.id) },
+                "일정",
+                null
+            )
+        }
+        is CalendarItem.NoteLinkItem -> {
+            Triple5(
+                Icons.Outlined.Note,
+                AppColors.Warning,
+                { onNoteClick(item.noteId) }, // Navigate to the parent note
+                "노트",
+                item.noteTitle // Show note title as subtitle
+            )
+        }
+        is CalendarItem.PhotoItem -> {
+            Triple5(
+                Icons.Outlined.Photo,
+                AppColors.Success,
+                { onPhotoClick(item.id) },
+                "사진",
+                null
+            )
+        }
     }
     
     Surface(
@@ -522,23 +535,39 @@ private fun CalendarItemRow(
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(AppSpacing.Small))
-            Text(
-                text = item.displayTitle,
-                style = AppTypography.Body1,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f)
-            )
+            
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = item.displayTitle,
+                    style = AppTypography.Body1,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                // Show note title for note links
+                if (subtitle != null) {
+                    Text(
+                        text = subtitle,
+                        style = AppTypography.Caption1,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
             
             // Type label
             Text(
-                text = when (item) {
-                    is CalendarItem.ScheduleItem -> "일정"
-                    is CalendarItem.NoteItem -> "노트"
-                    is CalendarItem.PhotoItem -> "사진"
-                },
+                text = typeLabel,
                 style = AppTypography.Caption2.copy(color = iconColor)
             )
         }
     }
 }
+
+// Helper data class for calendar item properties
+private data class Triple5<A, B, C, D, E>(
+    val first: A,
+    val second: B,
+    val third: C,
+    val fourth: D,
+    val fifth: E
+)

@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.scheduleapp.data.model.Note
+import com.scheduleapp.data.model.NoteDateLink
 import com.scheduleapp.data.model.Photo
 import com.scheduleapp.data.model.Schedule
 
@@ -16,9 +17,10 @@ import com.scheduleapp.data.model.Schedule
     entities = [
         Schedule::class,
         Note::class,
+        NoteDateLink::class,
         Photo::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
@@ -26,6 +28,7 @@ abstract class AppDatabase : RoomDatabase() {
     
     abstract fun scheduleDao(): ScheduleDao
     abstract fun noteDao(): NoteDao
+    abstract fun noteDateLinkDao(): NoteDateLinkDao
     abstract fun photoDao(): PhotoDao
     
     companion object {
