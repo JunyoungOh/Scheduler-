@@ -25,8 +25,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
-          cache-dependency-path: ScheduleApp/gradle/wrapper/gradle-wrapper.properties
+      
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.5
       
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -45,7 +48,8 @@ jobs:
           rm -rf pretendard_temp pretendard.zip
       
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon
+        working-directory: ScheduleApp
       
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
@@ -68,8 +72,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
-          cache-dependency-path: ScheduleApp/gradle/wrapper/gradle-wrapper.properties
+      
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.5
       
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -86,7 +93,8 @@ jobs:
           rm -rf pretendard_temp pretendard.zip
       
       - name: Build Release APK
-        run: ./gradlew assembleRelease --no-daemon
+        run: gradle assembleRelease --no-daemon
+        working-directory: ScheduleApp
       
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
@@ -108,8 +116,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
-          cache-dependency-path: ScheduleApp/gradle/wrapper/gradle-wrapper.properties
+      
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.5
       
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -126,7 +137,8 @@ jobs:
           rm -rf pretendard_temp pretendard.zip
       
       - name: Run Lint
-        run: ./gradlew lint --no-daemon
+        run: gradle lint --no-daemon
+        working-directory: ScheduleApp
       
       - name: Upload Lint Report
         uses: actions/upload-artifact@v4
@@ -149,8 +161,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
-          cache-dependency-path: ScheduleApp/gradle/wrapper/gradle-wrapper.properties
+      
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.5
       
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -167,7 +182,8 @@ jobs:
           rm -rf pretendard_temp pretendard.zip
       
       - name: Run Unit Tests
-        run: ./gradlew test --no-daemon
+        run: gradle test --no-daemon
+        working-directory: ScheduleApp
       
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
