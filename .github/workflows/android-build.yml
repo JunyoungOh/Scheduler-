@@ -7,6 +7,10 @@ on:
     branches: [ main ]
   workflow_dispatch:  # Allows manual triggering
 
+defaults:
+  run:
+    working-directory: ScheduleApp
+
 jobs:
   build:
     name: Build APK
@@ -22,6 +26,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+          cache-dependency-path: ScheduleApp/gradle/wrapper/gradle-wrapper.properties
       
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -46,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: ScheduleApp/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 14
 
   build-release:
@@ -64,6 +69,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+          cache-dependency-path: ScheduleApp/gradle/wrapper/gradle-wrapper.properties
       
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -86,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-release-unsigned
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          path: ScheduleApp/app/build/outputs/apk/release/app-release-unsigned.apk
           retention-days: 30
 
   lint:
@@ -103,6 +109,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+          cache-dependency-path: ScheduleApp/gradle/wrapper/gradle-wrapper.properties
       
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -126,7 +133,7 @@ jobs:
         if: always()
         with:
           name: lint-report
-          path: app/build/reports/lint-results-debug.html
+          path: ScheduleApp/app/build/reports/lint-results-debug.html
           retention-days: 7
 
   unit-test:
@@ -143,6 +150,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+          cache-dependency-path: ScheduleApp/gradle/wrapper/gradle-wrapper.properties
       
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -166,5 +174,5 @@ jobs:
         if: always()
         with:
           name: test-report
-          path: app/build/reports/tests/
+          path: ScheduleApp/app/build/reports/tests/
           retention-days: 7
