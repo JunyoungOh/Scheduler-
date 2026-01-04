@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">큐트너 레이징</string>
+    <string name="app_name_en">Cutener Raising</string>
+    
+    <!-- Character Names -->
+    <string name="character_flame">불꽃이</string>
+    <string name="character_droplet">물방울</string>
+    <string name="character_sprout">새싹이</string>
+    
+    <!-- Growth Stages -->
+    <string name="stage_baby">유아기</string>
+    <string name="stage_child">성장기</string>
+    <string name="stage_teen">성숙기</string>
+    <string name="stage_adult">완숙기</string>
+    <string name="stage_perfect">절정기</string>
+    
+    <!-- Actions -->
+    <string name="action_feed">밥 주기</string>
+    <string name="action_play">놀아주기</string>
+    <string name="action_clean">청소하기</string>
+    <string name="action_sleep">재우기</string>
+    <string name="action_train">훈련하기</string>
+    <string name="action_heal">치료하기</string>
+    <string name="action_battle">대결하기</string>
+    
+    <!-- Stats -->
+    <string name="stat_hp">체력</string>
+    <string name="stat_hunger">배고픔</string>
+    <string name="stat_happiness">행복도</string>
+    <string name="stat_strength">힘</string>
+    <string name="stat_defense">방어</string>
+    <string name="stat_speed">스피드</string>
+    <string name="stat_cleanliness">청결도</string>
+    <string name="stat_fatigue">피로도</string>
+    
+    <!-- Screens -->
+    <string name="screen_home">홈</string>
+    <string name="screen_status">상태</string>
+    <string name="screen_battle">대결</string>
+    <string name="screen_settings">설정</string>
+    
+    <!-- Messages -->
+    <string name="msg_welcome">새로운 파트너를 선택하세요!</string>
+    <string name="msg_hungry">배가 고파요!</string>
+    <string name="msg_dirty">청소가 필요해요!</string>
+    <string name="msg_tired">졸려요…</string>
+    <string name="msg_happy">기분이 좋아요!</string>
+    <string name="msg_sick">아파요…</string>
+    
+    <!-- Battle -->
+    <string name="battle_searching">상대를 찾는 중…</string>
+    <string name="battle_found">상대를 찾았습니다!</string>
+    <string name="battle_win">승리!</string>
+    <string name="battle_lose">패배…</string>
+    <string name="battle_draw">무승부</string>
+    
+    <!-- Permissions -->
+    <string name="permission_bluetooth_title">블루투스 권한</string>
+    <string name="permission_bluetooth_message">근처 친구와 대결하려면 블루투스 권한이 필요합니다.</string>
+    <string name="permission_location_title">위치 권한</string>
+    <string name="permission_location_message">주변 기기를 찾으려면 위치 권한이 필요합니다.</string>
+</resources>

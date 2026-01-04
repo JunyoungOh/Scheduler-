@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working-directory: ScheduleApp
+    working-directory: CutenerRaising
 
 jobs:
   build:
@@ -34,28 +34,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       
-      - name: Download Pretendard fonts
-        run: |
-          mkdir -p app/src/main/res/font
-          # Download Pretendard Variable font and create required variants
-          curl -L -o pretendard.zip "https://github.com/orioncactus/pretendard/releases/download/v1.3.9/Pretendard-1.3.9.zip"
-          unzip -o pretendard.zip -d pretendard_temp
-          # Copy required font files
-          cp pretendard_temp/public/static/Pretendard-Regular.otf app/src/main/res/font/pretendard_regular.otf
-          cp pretendard_temp/public/static/Pretendard-Medium.otf app/src/main/res/font/pretendard_medium.otf
-          cp pretendard_temp/public/static/Pretendard-SemiBold.otf app/src/main/res/font/pretendard_semibold.otf
-          cp pretendard_temp/public/static/Pretendard-Bold.otf app/src/main/res/font/pretendard_bold.otf
-          rm -rf pretendard_temp pretendard.zip
-      
       - name: Build Debug APK
         run: gradle assembleDebug --no-daemon
-        working-directory: ScheduleApp
+        working-directory: CutenerRaising
       
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
-          path: ScheduleApp/app/build/outputs/apk/debug/app-debug.apk
+          name: cutener-debug
+          path: CutenerRaising/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 14
 
   build-release:
@@ -81,26 +68,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       
-      - name: Download Pretendard fonts
-        run: |
-          mkdir -p app/src/main/res/font
-          curl -L -o pretendard.zip "https://github.com/orioncactus/pretendard/releases/download/v1.3.9/Pretendard-1.3.9.zip"
-          unzip -o pretendard.zip -d pretendard_temp
-          cp pretendard_temp/public/static/Pretendard-Regular.otf app/src/main/res/font/pretendard_regular.otf
-          cp pretendard_temp/public/static/Pretendard-Medium.otf app/src/main/res/font/pretendard_medium.otf
-          cp pretendard_temp/public/static/Pretendard-SemiBold.otf app/src/main/res/font/pretendard_semibold.otf
-          cp pretendard_temp/public/static/Pretendard-Bold.otf app/src/main/res/font/pretendard_bold.otf
-          rm -rf pretendard_temp pretendard.zip
-      
       - name: Build Release APK
         run: gradle assembleRelease --no-daemon
-        working-directory: ScheduleApp
+        working-directory: CutenerRaising
       
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release-unsigned
-          path: ScheduleApp/app/build/outputs/apk/release/app-release-unsigned.apk
+          name: cutener-release-unsigned
+          path: CutenerRaising/app/build/outputs/apk/release/app-release-unsigned.apk
           retention-days: 30
 
   lint:
@@ -125,27 +101,16 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       
-      - name: Download Pretendard fonts
-        run: |
-          mkdir -p app/src/main/res/font
-          curl -L -o pretendard.zip "https://github.com/orioncactus/pretendard/releases/download/v1.3.9/Pretendard-1.3.9.zip"
-          unzip -o pretendard.zip -d pretendard_temp
-          cp pretendard_temp/public/static/Pretendard-Regular.otf app/src/main/res/font/pretendard_regular.otf
-          cp pretendard_temp/public/static/Pretendard-Medium.otf app/src/main/res/font/pretendard_medium.otf
-          cp pretendard_temp/public/static/Pretendard-SemiBold.otf app/src/main/res/font/pretendard_semibold.otf
-          cp pretendard_temp/public/static/Pretendard-Bold.otf app/src/main/res/font/pretendard_bold.otf
-          rm -rf pretendard_temp pretendard.zip
-      
       - name: Run Lint
         run: gradle lint --no-daemon
-        working-directory: ScheduleApp
+        working-directory: CutenerRaising
       
       - name: Upload Lint Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lint-report
-          path: ScheduleApp/app/build/reports/lint-results-debug.html
+          path: CutenerRaising/app/build/reports/lint-results-debug.html
           retention-days: 7
 
   unit-test:
@@ -170,25 +135,14 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       
-      - name: Download Pretendard fonts
-        run: |
-          mkdir -p app/src/main/res/font
-          curl -L -o pretendard.zip "https://github.com/orioncactus/pretendard/releases/download/v1.3.9/Pretendard-1.3.9.zip"
-          unzip -o pretendard.zip -d pretendard_temp
-          cp pretendard_temp/public/static/Pretendard-Regular.otf app/src/main/res/font/pretendard_regular.otf
-          cp pretendard_temp/public/static/Pretendard-Medium.otf app/src/main/res/font/pretendard_medium.otf
-          cp pretendard_temp/public/static/Pretendard-SemiBold.otf app/src/main/res/font/pretendard_semibold.otf
-          cp pretendard_temp/public/static/Pretendard-Bold.otf app/src/main/res/font/pretendard_bold.otf
-          rm -rf pretendard_temp pretendard.zip
-      
       - name: Run Unit Tests
         run: gradle test --no-daemon
-        working-directory: ScheduleApp
+        working-directory: CutenerRaising
       
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-report
-          path: ScheduleApp/app/build/reports/tests/
+          path: CutenerRaising/app/build/reports/tests/
           retention-days: 7
