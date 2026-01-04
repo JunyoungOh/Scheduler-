@@ -456,7 +456,7 @@ object SpriteRepository {
         return when (path) {
             EvolutionPath.HAPPY -> 5    // 웃는 입
             EvolutionPath.ANGRY -> 4    // 화난 입 (진한 색)
-            EvolutionPath.SAD, EvolutionPath.SICK, EvolutionPath.NEGLECTED -> 5  // 슬픈 입
+            EvolutionPath.SICK, EvolutionPath.NEGLECTED -> 5  // 슬픈 입
             else -> 5
         }
     }
@@ -598,7 +598,7 @@ object SpriteRepository {
                     pixels[eyeY - 1][center + eyeOffset + 1] = 4  // 오른쪽 눈썹
                 }
             }
-            EvolutionPath.SAD, EvolutionPath.SICK, EvolutionPath.NEGLECTED -> {
+            EvolutionPath.SICK, EvolutionPath.NEGLECTED -> {
                 // 슬픈 눈
                 pixels[eyeY][center - eyeOffset] = 5
                 pixels[eyeY][center + eyeOffset] = 5
@@ -645,7 +645,7 @@ object SpriteRepository {
                 pixels[mouthY][center] = 4
                 pixels[mouthY][center + 1] = 4
             }
-            EvolutionPath.SAD, EvolutionPath.SICK, EvolutionPath.NEGLECTED -> {
+            EvolutionPath.SICK, EvolutionPath.NEGLECTED -> {
                 // 슬픈 입
                 if (mouthY + 1 < size) {
                     pixels[mouthY + 1][center - 1] = 5
