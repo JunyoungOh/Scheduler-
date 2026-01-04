@@ -1,6 +1,10 @@
 package com.cutener.raising.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -118,11 +122,11 @@ fun CutenerNavGraph(
 
 @Composable
 private fun LoadingScreen() {
-    androidx.compose.foundation.layout.Box(
-        modifier = androidx.compose.ui.Modifier.fillMaxSize(),
-        contentAlignment = androidx.compose.ui.Alignment.Center
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        androidx.compose.material3.CircularProgressIndicator(
+        CircularProgressIndicator(
             color = com.cutener.raising.ui.theme.Primary
         )
     }

@@ -234,7 +234,7 @@ private fun StatIndicator(
         )
         Spacer(modifier = Modifier.height(4.dp))
         LinearProgressIndicator(
-            progress = { percentage },
+            progress = percentage,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(8.dp)

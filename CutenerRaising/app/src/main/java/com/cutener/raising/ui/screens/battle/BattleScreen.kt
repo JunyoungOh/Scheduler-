@@ -392,7 +392,7 @@ private fun HpBar(current: Int, max: Int, color: Color) {
             style = MaterialTheme.typography.labelSmall
         )
         LinearProgressIndicator(
-            progress = { percentage },
+            progress = percentage,
             modifier = Modifier
                 .width(80.dp)
                 .height(8.dp)
