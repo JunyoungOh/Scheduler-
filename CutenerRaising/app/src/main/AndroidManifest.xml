@@ -52,6 +52,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".crash.CrashActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CutenerRaising" />
+
         <!-- WorkManager initialization -->
         <provider
             android:name="androidx.startup.InitializationProvider"
