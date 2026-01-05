@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.cutener.raising.data.model.BattleResult
 import com.cutener.raising.data.model.Pet
 import com.cutener.raising.game.sprite.AnimationState
@@ -51,7 +52,8 @@ fun CutenerNavGraph(
             is GameState.NoPet -> {
                 if (navController.currentDestination?.route != Screen.CharacterSelect.route) {
                     navController.navigate(Screen.CharacterSelect.route) {
-                        popUpTo(0) { inclusive = true }
+                        popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
+                        launchSingleTop = true
                     }
                 }
             }
