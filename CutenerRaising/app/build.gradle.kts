@@ -87,9 +87,6 @@ dependencies {
     implementation("androidx.hilt:hilt-work:1.1.0")
     ksp("androidx.hilt:hilt-compiler:1.1.0")
     
-    // Google Play Services - Nearby Connections for Bluetooth P2P
-    implementation("com.google.android.gms:play-services-nearby:19.0.0")
-    
     // DataStore for preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     
