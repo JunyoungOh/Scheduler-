@@ -50,34 +50,28 @@ class NearbyConnectionManager @Inject constructor(
     private val _receivedMessages = Channel<ReceivedMessage>(Channel.BUFFERED)
     val receivedMessages = _receivedMessages
     
-    private var connectedEndpointId: String? = null
-    private var localPetData: BattlePetData? = null
-    
     /**
      * 광고 시작 (대결 상대를 기다림)
      */
     fun startAdvertising(petData: BattlePetData, userName: String) {
-        localPetData = petData
-        Log.w(TAG, "Nearby advertising is disabled. userName=$userName")
-        _connectionState.value = ConnectionState.Error("블루투스 기능이 비활성화되었습니다.")
+        Log.w(TAG, "Nearby advertising is disabled. userName=$userName, petData=$petData")
+        markDisabled()
     }
     
     /**
      * 검색 시작 (대결 상대를 찾음)
      */
     fun startDiscovery(petData: BattlePetData) {
-        localPetData = petData
-        Log.w(TAG, "Nearby discovery is disabled.")
-        _connectionState.value = ConnectionState.Error("블루투스 기능이 비활성화되었습니다.")
+        Log.w(TAG, "Nearby discovery is disabled. petData=$petData")
+        markDisabled()
     }
     
     /**
      * 광고 및 검색 동시 시작 (양방향 매칭)
      */
     fun startBothAdvertisingAndDiscovery(petData: BattlePetData, userName: String) {
-        localPetData = petData
-        Log.w(TAG, "Nearby advertising/discovery is disabled. userName=$userName")
-        _connectionState.value = ConnectionState.Error("블루투스 기능이 비활성화되었습니다.")
+        Log.w(TAG, "Nearby advertising/discovery is disabled. userName=$userName, petData=$petData")
+        markDisabled()
     }
     
     /**
@@ -85,7 +79,6 @@ class NearbyConnectionManager @Inject constructor(
      */
     fun stopAll() {
         Log.d(TAG, "Nearby stopAll called (disabled).")
-        connectedEndpointId = null
         _connectionState.value = ConnectionState.Idle
     }
     
@@ -115,5 +108,9 @@ class NearbyConnectionManager @Inject constructor(
      */
     fun rejectConnection(endpointId: String) {
         Log.w(TAG, "rejectConnection ignored because Nearby is disabled. endpointId=$endpointId")
+    }
+
+    private fun markDisabled() {
+        _connectionState.value = ConnectionState.Error("블루투스 기능이 비활성화되었습니다.")
     }
 }

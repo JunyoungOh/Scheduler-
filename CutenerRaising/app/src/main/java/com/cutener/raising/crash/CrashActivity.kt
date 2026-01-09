@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import com.cutener.raising.ui.theme.CutenerRaisingTheme
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -36,7 +35,7 @@ class CrashActivity : ComponentActivity() {
         val timestamp = intent.getLongExtra(EXTRA_TIMESTAMP, 0L)
 
         setContent {
-            CutenerRaisingTheme {
+            MaterialTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     CrashScreen(
                         stacktrace = stacktrace,
