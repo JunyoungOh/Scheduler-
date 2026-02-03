@@ -1,7 +1,7 @@
 package com.cutener.raising.di
 
 import android.content.Context
-import com.cutener.raising.bluetooth.NearbyConnectionManager
+import com.cutener.raising.data.bluetooth.BluetoothManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,12 +12,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object BluetoothModule {
-    
+
     @Provides
     @Singleton
-    fun provideNearbyConnectionManager(
-        @ApplicationContext context: Context
-    ): NearbyConnectionManager {
-        return NearbyConnectionManager(context)
+    fun provideBluetoothManager(@ApplicationContext context: Context): BluetoothManager {
+        return BluetoothManager(context)
     }
 }
