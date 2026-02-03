@@ -38,12 +38,29 @@ fun CharacterRenderer(
 
     val shakeX by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = if (animState == CharacterAnimState.TRAINING) 10f else 0f,
+        targetValue = when (animState) {
+            CharacterAnimState.TRAINING -> 10f
+            CharacterAnimState.HIT -> 15f
+            else -> 0f
+        },
         animationSpec = infiniteRepeatable(
-            animation = tween(100, easing = LinearEasing),
+            animation = tween(
+                durationMillis = if (animState == CharacterAnimState.HIT) 50 else 100,
+                easing = LinearEasing
+            ),
             repeatMode = RepeatMode.Reverse
         ),
         label = "shake"
+    )
+
+    val lungeX by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = if (animState == CharacterAnimState.ATTACK) 40f else 0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(200, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "lunge"
     )
 
     val scaleVal by infiniteTransition.animateFloat(
@@ -76,15 +93,25 @@ fun CharacterRenderer(
             val colors = getCharacterColors(charClass)
             val grid = getCharacterGrid(charClass)
 
-            translate(left = shakeX, top = bounceY) {
+            translate(left = shakeX + lungeX, top = bounceY) {
                 scale(scaleVal, scaleVal, pivot = center) {
                     rotate(rotationVal, pivot = center) {
                          grid.forEachIndexed { rowIndex, rowString ->
                             rowString.forEachIndexed { colIndex, char ->
                                 if (char != '.') {
-                                    val color = colors[char] ?: Color.Magenta
+                                    val originalColor = colors[char] ?: Color.Magenta
+
+                                    val finalColor = if (animState == CharacterAnimState.HIT) {
+                                        Color(
+                                            red = 1f,
+                                            green = originalColor.green * 0.3f,
+                                            blue = originalColor.blue * 0.3f,
+                                            alpha = originalColor.alpha
+                                        )
+                                    } else originalColor
+
                                     drawRect(
-                                        color = color,
+                                        color = finalColor,
                                         topLeft = Offset(colIndex * pixelSize, rowIndex * pixelSize),
                                         size = Size(pixelSize, pixelSize)
                                     )
