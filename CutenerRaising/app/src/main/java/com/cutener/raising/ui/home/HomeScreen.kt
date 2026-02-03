@@ -10,7 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cutener.raising.domain.model.Character
+import com.cutener.raising.domain.model.CharacterAnimState
 import com.cutener.raising.domain.model.CharacterClass
+import com.cutener.raising.ui.components.CharacterRenderer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,6 +21,7 @@ fun HomeScreen(
     onNavigateToBattle: () -> Unit
 ) {
     val characterState by viewModel.characterState.collectAsStateWithLifecycle()
+    val animState by viewModel.animState.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -40,6 +43,7 @@ fun HomeScreen(
             } else {
                 CharacterDashboard(
                     character = characterState!!,
+                    animState = animState,
                     onTrain = viewModel::train,
                     onFeed = viewModel::feed,
                     onRest = viewModel::rest,
@@ -120,6 +124,7 @@ fun CharacterCreationScreen(onCharacterCreated: (String, CharacterClass) -> Unit
 @Composable
 fun CharacterDashboard(
     character: Character,
+    animState: CharacterAnimState,
     onTrain: () -> Unit,
     onFeed: () -> Unit,
     onRest: () -> Unit,
@@ -137,7 +142,17 @@ fun CharacterDashboard(
             modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(
+                modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CharacterRenderer(
+                    charClass = character.charClass,
+                    animState = animState,
+                    modifier = Modifier.size(120.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Text(text = character.name, style = MaterialTheme.typography.headlineLarge)
                 Text(text = "Lv. ${character.level} ${character.charClass.title}", style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(8.dp))

@@ -3,12 +3,15 @@ package com.cutener.raising.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cutener.raising.domain.model.Character
+import com.cutener.raising.domain.model.CharacterAnimState
 import com.cutener.raising.domain.model.CharacterClass
 import com.cutener.raising.domain.repository.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,6 +24,9 @@ class HomeViewModel @Inject constructor(
 
     val characterState: StateFlow<Character?> = repository.getCharacter()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    private val _animState = MutableStateFlow(CharacterAnimState.IDLE)
+    val animState = _animState.asStateFlow()
 
     fun createCharacter(name: String, charClass: CharacterClass) {
         viewModelScope.launch {
@@ -68,6 +74,12 @@ class HomeViewModel @Inject constructor(
             maxExp = finalMaxExp
         )
         updateCharacter(updated)
+
+        viewModelScope.launch {
+            _animState.value = CharacterAnimState.TRAINING
+            delay(2000)
+            _animState.value = CharacterAnimState.IDLE
+        }
     }
 
     fun feed() {
@@ -78,6 +90,12 @@ class HomeViewModel @Inject constructor(
         val newEnergy = (current.currentEnergy + 20).coerceAtMost(current.maxEnergy)
 
         updateCharacter(current.copy(currentHp = newHp, currentEnergy = newEnergy))
+
+        viewModelScope.launch {
+            _animState.value = CharacterAnimState.EATING
+            delay(2000)
+            _animState.value = CharacterAnimState.IDLE
+        }
     }
 
     fun rest() {
@@ -85,6 +103,12 @@ class HomeViewModel @Inject constructor(
         // Full restore Energy
         val newEnergy = current.maxEnergy
         updateCharacter(current.copy(currentEnergy = newEnergy))
+
+        viewModelScope.launch {
+            _animState.value = CharacterAnimState.SLEEPING
+            delay(3000)
+            _animState.value = CharacterAnimState.IDLE
+        }
     }
 
     fun deleteCharacter() {
