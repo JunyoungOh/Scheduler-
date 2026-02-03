@@ -52,11 +52,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".crash.CrashActivity"
-            android:exported="false"
-            android:theme="@style/Theme.CutenerRaising" />
-
         <!-- WorkManager initialization -->
         <provider
             android:name="androidx.startup.InitializationProvider"
@@ -68,15 +63,6 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
         </provider>
-
-        <!-- Boot receiver for background pet care -->
-        <receiver
-            android:name=".game.engine.BootReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
 
     </application>
 
