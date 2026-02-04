@@ -7,5 +7,7 @@ enum class CharacterAnimState {
     SLEEPING,
     BATTLE_IDLE,
     ATTACK,
-    HIT
+    HIT,
+    VICTORY,
+    DEFEAT
 }

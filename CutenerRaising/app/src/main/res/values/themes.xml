@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Neo-Brutalism Theme for Pocket Arena -->
     <style name="Theme.CutenerRaising" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/primary</item>
-        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:statusBarColor">@color/vivid_yellow</item>
+        <item name="android:navigationBarColor">@color/cream_yellow</item>
+        <item name="android:windowBackground">@color/cream_yellow</item>
+        <item name="android:colorPrimary">@color/hot_pink</item>
+        <item name="android:colorAccent">@color/vivid_yellow</item>
     </style>
 </resources>

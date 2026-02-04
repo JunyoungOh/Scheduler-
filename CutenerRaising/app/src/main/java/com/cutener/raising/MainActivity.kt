@@ -7,7 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,6 +18,7 @@ import com.cutener.raising.ui.battle.BattleScreen
 import com.cutener.raising.ui.battle.BattleViewModel
 import com.cutener.raising.ui.home.HomeScreen
 import com.cutener.raising.ui.home.HomeViewModel
+import com.cutener.raising.ui.theme.CutenerRaisingTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
         requestBluetoothPermissions()
 
         setContent {
-            MaterialTheme {
+            CutenerRaisingTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     val navController = rememberNavController()
 
