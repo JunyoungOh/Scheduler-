@@ -176,7 +176,7 @@ fun CharacterCreationScreen(onCharacterCreated: (String, CharacterClass) -> Unit
                 CharacterRenderer(
                     charClass = selectedClass,
                     animState = CharacterAnimState.IDLE,
-                    modifier = Modifier.size(160.dp),
+                    modifier = Modifier.size(200.dp),
                     showFrame = true
                 )
             }
@@ -375,7 +375,7 @@ fun CharacterDashboard(
                 CharacterRenderer(
                     charClass = character.charClass,
                     animState = animState,
-                    modifier = Modifier.size(180.dp),
+                    modifier = Modifier.size(220.dp),
                     showFrame = true
                 )
             }

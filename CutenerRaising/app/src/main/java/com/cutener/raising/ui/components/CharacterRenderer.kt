@@ -26,8 +26,8 @@ import com.cutener.raising.ui.theme.NeoBrutalistColors
  * Enhanced Character Renderer with Tamagotchi/Digimon style pixel art
  * 
  * Features:
- * - 24x24 pixel grid for detailed characters
- * - Cute cartoon-style design
+ * - 36x36 pixel grid for highly detailed characters
+ * - Cute cartoon-style design with expressive faces
  * - Smooth animations
  * - Neo-Brutalist frame styling
  */
@@ -43,7 +43,7 @@ fun CharacterRenderer(
     // Breathing/Bounce animation (Idle)
     val bounceY by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = if (animState == CharacterAnimState.IDLE || animState == CharacterAnimState.BATTLE_IDLE) -8f else 0f,
+        targetValue = if (animState == CharacterAnimState.IDLE || animState == CharacterAnimState.BATTLE_IDLE) -6f else 0f,
         animationSpec = infiniteRepeatable(
             animation = tween(600, easing = EaseInOutSine),
             repeatMode = RepeatMode.Reverse
@@ -73,8 +73,8 @@ fun CharacterRenderer(
     val shakeX by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = when (animState) {
-            CharacterAnimState.TRAINING -> 6f
-            CharacterAnimState.HIT -> 12f
+            CharacterAnimState.TRAINING -> 5f
+            CharacterAnimState.HIT -> 10f
             else -> 0f
         },
         animationSpec = infiniteRepeatable(
@@ -90,7 +90,7 @@ fun CharacterRenderer(
     // Attack lunge
     val lungeX by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = if (animState == CharacterAnimState.ATTACK) 30f else 0f,
+        targetValue = if (animState == CharacterAnimState.ATTACK) 25f else 0f,
         animationSpec = infiniteRepeatable(
             animation = tween(150, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
@@ -101,7 +101,7 @@ fun CharacterRenderer(
     // Scale animation (Eating)
     val scaleVal by infiniteTransition.animateFloat(
         initialValue = 1f,
-        targetValue = if (animState == CharacterAnimState.EATING) 1.15f else 1f,
+        targetValue = if (animState == CharacterAnimState.EATING) 1.12f else 1f,
         animationSpec = infiniteRepeatable(
             animation = tween(400, easing = EaseInOutSine),
             repeatMode = RepeatMode.Reverse
@@ -112,7 +112,7 @@ fun CharacterRenderer(
     // Sleeping rotation
     val rotationVal by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = if (animState == CharacterAnimState.SLEEPING) 8f else 0f,
+        targetValue = if (animState == CharacterAnimState.SLEEPING) 6f else 0f,
         animationSpec = infiniteRepeatable(
             animation = tween(1500, easing = EaseInOutSine),
             repeatMode = RepeatMode.Reverse
@@ -123,7 +123,7 @@ fun CharacterRenderer(
     // Zzz bubble animation
     val zzzOffset by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = if (animState == CharacterAnimState.SLEEPING) -15f else 0f,
+        targetValue = if (animState == CharacterAnimState.SLEEPING) -12f else 0f,
         animationSpec = infiniteRepeatable(
             animation = tween(1000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
@@ -134,7 +134,7 @@ fun CharacterRenderer(
     // Happy jump for level up or victories
     val happyBounce by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = if (animState == CharacterAnimState.VICTORY) -15f else 0f,
+        targetValue = if (animState == CharacterAnimState.VICTORY) -12f else 0f,
         animationSpec = infiniteRepeatable(
             animation = tween(300, easing = EaseOutBounce),
             repeatMode = RepeatMode.Reverse
@@ -152,12 +152,12 @@ fun CharacterRenderer(
     }
 
     Box(modifier = modifier.then(frameModifier)) {
-        Canvas(modifier = Modifier.size(144.dp)) {
-            val pixelSize = size.width / 24f // 24x24 grid
+        Canvas(modifier = Modifier.size(180.dp)) {
+            val pixelSize = size.width / 36f // 36x36 grid
             val center = Offset(size.width / 2, size.height / 2)
 
             val colors = getEnhancedCharacterColors(charClass)
-            val grid = getEnhancedCharacterGrid(charClass)
+            val grid = get36x36CharacterGrid(charClass)
 
             val totalOffsetX = shakeX + lungeX
             val totalOffsetY = bounceY + happyBounce
@@ -172,7 +172,7 @@ fun CharacterRenderer(
 
                                     // Eye blink effect (for 'E' - eyes)
                                     if (char == 'E' && eyeBlink < 0.5f) {
-                                        originalColor = colors['O'] ?: originalColor // Use outline color for blink
+                                        originalColor = colors['O'] ?: originalColor
                                     }
 
                                     // Hit flash effect
@@ -199,21 +199,21 @@ fun CharacterRenderer(
 
             // Sleep effects (Zzz bubbles)
             if (animState == CharacterAnimState.SLEEPING) {
-                val bubbleX = size.width * 0.75f
+                val bubbleX = size.width * 0.78f
                 drawCircle(
                     Color.White,
-                    radius = 8.dp.toPx(),
-                    center = Offset(bubbleX, size.height * 0.25f + zzzOffset)
+                    radius = 10.dp.toPx(),
+                    center = Offset(bubbleX, size.height * 0.22f + zzzOffset)
                 )
                 drawCircle(
                     Color.White,
-                    radius = 5.dp.toPx(),
-                    center = Offset(bubbleX + 10.dp.toPx(), size.height * 0.15f + zzzOffset * 0.7f)
+                    radius = 7.dp.toPx(),
+                    center = Offset(bubbleX + 12.dp.toPx(), size.height * 0.12f + zzzOffset * 0.7f)
                 )
                 drawCircle(
                     Color.White,
-                    radius = 3.dp.toPx(),
-                    center = Offset(bubbleX + 18.dp.toPx(), size.height * 0.08f + zzzOffset * 0.4f)
+                    radius = 4.dp.toPx(),
+                    center = Offset(bubbleX + 20.dp.toPx(), size.height * 0.05f + zzzOffset * 0.4f)
                 )
             }
 
@@ -222,13 +222,18 @@ fun CharacterRenderer(
                 val sparkleAlpha = (kotlin.math.sin(scaleVal * 10) * 0.5f + 0.5f).coerceIn(0f, 1f)
                 drawCircle(
                     NeoBrutalistColors.VividYellow.copy(alpha = sparkleAlpha),
-                    radius = 4.dp.toPx(),
-                    center = Offset(size.width * 0.2f, size.height * 0.3f)
+                    radius = 5.dp.toPx(),
+                    center = Offset(size.width * 0.18f, size.height * 0.28f)
                 )
                 drawCircle(
                     NeoBrutalistColors.HotPink.copy(alpha = sparkleAlpha),
+                    radius = 4.dp.toPx(),
+                    center = Offset(size.width * 0.82f, size.height * 0.22f)
+                )
+                drawCircle(
+                    NeoBrutalistColors.MintGreen.copy(alpha = sparkleAlpha),
                     radius = 3.dp.toPx(),
-                    center = Offset(size.width * 0.8f, size.height * 0.25f)
+                    center = Offset(size.width * 0.15f, size.height * 0.45f)
                 )
             }
 
@@ -236,7 +241,12 @@ fun CharacterRenderer(
             if (animState == CharacterAnimState.TRAINING) {
                 drawOval(
                     Color.Cyan.copy(alpha = 0.8f),
-                    topLeft = Offset(size.width * 0.15f, size.height * 0.2f + shakeX),
+                    topLeft = Offset(size.width * 0.12f, size.height * 0.18f + shakeX),
+                    size = Size(5.dp.toPx(), 8.dp.toPx())
+                )
+                drawOval(
+                    Color.Cyan.copy(alpha = 0.6f),
+                    topLeft = Offset(size.width * 0.85f, size.height * 0.25f + shakeX * 0.7f),
                     size = Size(4.dp.toPx(), 6.dp.toPx())
                 )
             }
@@ -246,13 +256,23 @@ fun CharacterRenderer(
                 val starAlpha = (kotlin.math.sin(happyBounce * 5) * 0.5f + 0.5f).coerceIn(0f, 1f)
                 drawCircle(
                     NeoBrutalistColors.VividYellow.copy(alpha = starAlpha),
-                    radius = 5.dp.toPx(),
-                    center = Offset(size.width * 0.15f, size.height * 0.2f)
+                    radius = 6.dp.toPx(),
+                    center = Offset(size.width * 0.12f, size.height * 0.18f)
                 )
                 drawCircle(
                     NeoBrutalistColors.VividYellow.copy(alpha = starAlpha),
-                    radius = 5.dp.toPx(),
-                    center = Offset(size.width * 0.85f, size.height * 0.2f)
+                    radius = 6.dp.toPx(),
+                    center = Offset(size.width * 0.88f, size.height * 0.18f)
+                )
+                drawCircle(
+                    NeoBrutalistColors.HotPink.copy(alpha = starAlpha * 0.8f),
+                    radius = 4.dp.toPx(),
+                    center = Offset(size.width * 0.2f, size.height * 0.08f)
+                )
+                drawCircle(
+                    NeoBrutalistColors.HotPink.copy(alpha = starAlpha * 0.8f),
+                    radius = 4.dp.toPx(),
+                    center = Offset(size.width * 0.8f, size.height * 0.08f)
                 )
             }
         }
@@ -269,7 +289,12 @@ private fun getEnhancedCharacterColors(charClass: CharacterClass): Map<Char, Col
         'W' to Color(0xFFFFFFFF), // White
         'E' to Color(0xFF000000), // Eye Black
         'P' to Color(0xFFFFB6C1), // Blush Pink
-        'S' to Color(0xFFFFDBAC)  // Skin
+        'S' to Color(0xFFFFDBAC), // Skin
+        'K' to Color(0xFFE8C89C), // Skin Shadow
+        'Q' to Color(0xFFFFE4C4), // Skin Highlight
+        'R' to Color(0xFFFF6B6B), // Red accent
+        'Y' to Color(0xFFFFE500), // Yellow accent
+        'C' to Color(0xFF87CEEB)  // Cyan/Sky
     )
 
     val classColors = when (charClass) {
@@ -280,7 +305,10 @@ private fun getEnhancedCharacterColors(charClass: CharacterClass): Map<Char, Col
             'H' to Color(0xFFC0C0C0), // Helmet Silver
             'G' to Color(0xFFFFD700), // Gold accent
             'A' to Color(0xFF4169E1), // Armor Blue
-            'T' to Color(0xFF8B4513)  // Brown (leather)
+            'T' to Color(0xFF8B4513), // Brown (leather)
+            'M' to Color(0xFF6495ED), // Medium Blue
+            'N' to Color(0xFF4682B4), // Steel Blue
+            'X' to Color(0xFFB0C4DE)  // Light Steel
         )
         CharacterClass.MAGE -> mapOf(
             'B' to Color(0xFF9932CC), // Body Purple
@@ -289,7 +317,10 @@ private fun getEnhancedCharacterColors(charClass: CharacterClass): Map<Char, Col
             'H' to Color(0xFFFF69B4), // Hat Pink
             'G' to Color(0xFFFFD700), // Gold (staff tip)
             'A' to Color(0xFF4B0082), // Indigo
-            'T' to Color(0xFF8B4513)  // Brown (staff)
+            'T' to Color(0xFF8B4513), // Brown (staff)
+            'M' to Color(0xFFBA55D3), // Medium Orchid
+            'N' to Color(0xFF9370DB), // Medium Purple
+            'X' to Color(0xFFE6E6FA)  // Lavender
         )
         CharacterClass.PALADIN -> mapOf(
             'B' to Color(0xFFFFD700), // Body Gold
@@ -298,7 +329,10 @@ private fun getEnhancedCharacterColors(charClass: CharacterClass): Map<Char, Col
             'H' to Color(0xFFFFFFFF), // Helmet White
             'G' to Color(0xFFFF6347), // Red accent (cross)
             'A' to Color(0xFFFFC125), // Amber
-            'T' to Color(0xFFEEE8AA)  // Pale
+            'T' to Color(0xFFEEE8AA), // Pale
+            'M' to Color(0xFFFFEC8B), // Light Gold Yellow
+            'N' to Color(0xFFF0E68C), // Khaki
+            'X' to Color(0xFFFFF8DC)  // Cornsilk
         )
         CharacterClass.DARK_KNIGHT -> mapOf(
             'B' to Color(0xFF2F2F2F), // Body Dark
@@ -307,7 +341,10 @@ private fun getEnhancedCharacterColors(charClass: CharacterClass): Map<Char, Col
             'H' to Color(0xFF8B0000), // Helmet Dark Red
             'G' to Color(0xFFDC143C), // Crimson accent
             'A' to Color(0xFF800000), // Maroon
-            'T' to Color(0xFF696969)  // Dim Gray
+            'T' to Color(0xFF696969), // Dim Gray
+            'M' to Color(0xFF3D3D3D), // Medium Dark
+            'N' to Color(0xFF505050), // Gray
+            'X' to Color(0xFF708090)  // Slate Gray
         )
         CharacterClass.ROGUE -> mapOf(
             'B' to Color(0xFF228B22), // Body Green
@@ -316,7 +353,10 @@ private fun getEnhancedCharacterColors(charClass: CharacterClass): Map<Char, Col
             'H' to Color(0xFF2E8B57), // Sea Green (hood)
             'G' to Color(0xFFC0C0C0), // Silver (daggers)
             'A' to Color(0xFF556B2F), // Olive
-            'T' to Color(0xFF8B4513)  // Brown
+            'T' to Color(0xFF8B4513), // Brown
+            'M' to Color(0xFF3CB371), // Medium Sea Green
+            'N' to Color(0xFF2E8B57), // Sea Green
+            'X' to Color(0xFF98FB98)  // Pale Green
         )
         CharacterClass.ARCHER -> mapOf(
             'B' to Color(0xFFA0522D), // Body Brown
@@ -325,7 +365,10 @@ private fun getEnhancedCharacterColors(charClass: CharacterClass): Map<Char, Col
             'H' to Color(0xFF32CD32), // Lime Green (feather)
             'G' to Color(0xFFFFD700), // Gold (arrow tip)
             'A' to Color(0xFF228B22), // Forest Green
-            'T' to Color(0xFFF5DEB3)  // Wheat
+            'T' to Color(0xFFF5DEB3), // Wheat
+            'M' to Color(0xFFCD853F), // Peru
+            'N' to Color(0xFFD2691E), // Chocolate
+            'X' to Color(0xFFFFE4B5)  // Moccasin
         )
     }
 
@@ -333,185 +376,266 @@ private fun getEnhancedCharacterColors(charClass: CharacterClass): Map<Char, Col
 }
 
 /**
- * Enhanced 24x24 pixel grid for detailed character sprites
+ * High-quality 36x36 pixel grid for detailed character sprites
+ * 
  * Legend:
- * . = Empty
+ * . = Empty (transparent)
  * O = Outline (Black)
  * B = Body main color
  * D = Dark shade
  * L = Light shade
+ * M = Medium shade
+ * N = Secondary medium
+ * X = Highlight
  * H = Hat/Helmet
  * G = Gold/Special accent
  * A = Armor/Secondary
  * T = Tertiary color
  * S = Skin
- * E = Eyes
- * W = White
- * P = Pink (blush)
+ * K = Skin shadow
+ * Q = Skin highlight
+ * E = Eyes (black)
+ * W = White (eye whites)
+ * P = Pink (blush/cheeks)
+ * R = Red accent
+ * Y = Yellow accent
+ * C = Cyan accent
  */
-private fun getEnhancedCharacterGrid(charClass: CharacterClass): List<String> {
+private fun get36x36CharacterGrid(charClass: CharacterClass): List<String> {
     return when (charClass) {
         CharacterClass.WARRIOR -> listOf(
-            // Cute warrior with sword and shield - Digimon Agumon style cuteness
-            "........................",
-            "........OOOOOO..........",
-            ".......OHHHHHHOO........",
-            "......OHHLLLLLHHO.......",
-            ".....OHHLLLLLLHHHO......",
-            ".....OHHLLLLLLHHHO......",
-            "....OOOOSSSSSSOOOO......",
-            "....OSSSSEEWESSSO.......",
-            "....OSSSSEWWWESSSO......",
-            "....OSSSSPSSPSSSO.......",
-            "....OSSSSSSSSSSO........",
-            ".....OOSSSSSOO..........",
-            ".OOOOOOBBBBBBOOOOO......",
-            "OGGGOOBBBBBBBBOOBOO.....",
-            "OGGGOBBBBBBBBBOBABO.....",
-            "OGGGOBBBBBBBBBOBABO.....",
-            ".OOOOBBBBBBBBBBOOOO.....",
-            "....OBBBBOOBBBBOO.......",
-            "....OBBBOOOOBBBO........",
-            "....ODBDOOOOODBDO.......",
-            "...ODDDDOO.ODDDDO.......",
-            "...OTTTTOO.OTTTO........",
-            "....OOOO....OOOO........",
-            "........................"
+            // Brave Warrior with Sword & Shield - Agumon-inspired cuteness
+            "....................................",
+            "....................................",
+            "...........OOOOOOOOOO...............",
+            "..........OHHHHHHHHHHO..............",
+            ".........OHHXXXXXXXHHHO.............",
+            ".........OHHXXXXXXXXHHHO............",
+            "........OHHHXXXXXXXXHHHHO...........",
+            "........OHHHXXXXXXXHHHHHO...........",
+            "........OHHHHXXXXXXHHHHHO...........",
+            ".......OOOOOSSSSSSSSOOOOOO..........",
+            ".......OSSSSSSSSSSSSSSSSSO..........",
+            "......OSSSSQQQQQQQQQQSSSSO..........",
+            "......OSSSQSEWWWWWESSQSSSO..........",
+            "......OSSSQSEWEEEWESSQSSSO..........",
+            "......OSSSSSSSWWWSSSSSSSSO..........",
+            "......OSSSSSPSSSSPSSSSSSSO..........",
+            ".......OOSSSSSSSSSSSSSOO...........",
+            "........OOOSSSSSSSSOOO..............",
+            "..OOOOOOOOBBBBBBBBBBOOOOOOO.........",
+            ".OGGGGGGOBBBBBBBBBBBBOGGGGO.........",
+            ".OGGGGGGOBBBBBMMBBBBBOGGGGO.........",
+            ".OGGGGGOBBBBMMMMMBBBBBOOOOO.........",
+            ".OGGGGGOBBBBMMMMMBBBBBOAABO.........",
+            ".OGGGGOOBBBBBMMBBBBBBOOOABO.........",
+            "..OOOOOBBBBBBBBBBBBBBBOOABO.........",
+            "......OBBBBBBBBBBBBBBBBOOO..........",
+            "......OBBBBBBBOOBBBBBBBBO...........",
+            "......OBBBBBBOOOOBBBBBBBO...........",
+            "......OBBBDDOOOOOOBBBDDBO...........",
+            ".....ODDDDDDOO..ODDDDDDDO...........",
+            ".....ODDDDDDDO..ODDDDDDDO...........",
+            ".....OTTTTTTO....OTTTTTTTO..........",
+            ".....OTTTTTO......OTTTTTTO..........",
+            "......OOOOO........OOOOOO...........",
+            "....................................",
+            "...................................."
         )
         CharacterClass.MAGE -> listOf(
-            // Cute mage with pointy hat and staff - Wizardmon style
-            "..........OO............",
-            ".........OHHO...........",
-            "........OHHHO...........",
-            ".......OHHHHHO..........",
-            "......OHHLLHHHO.........",
-            ".....OHHLLLLHHO.........",
-            "....OHHHLLLLHHHO........",
-            "...OOOOSSSSSSOOOO.......",
-            "...OSSSSSEEWESSSO.......",
-            "...OSSSSSEWWWESSSO......",
-            "...OSSSSPSSPSSSO........",
-            "....OOSSSSSSOOO.........",
-            "..TOOOBBBBBBBOOOT.......",
-            ".TTOOBBBLLBBBBOO.T......",
-            ".T.OBBBLLLLLBBBO.T......",
-            ".T.OBBBLLGLLBBBO.T......",
-            ".TOOBBBLLGLLBBBOOT......",
-            ".TOOOBBBLLBBBBOOOT......",
-            ".T...OBBBBBBOO..T.......",
-            "OTO..OBBOOOBBO..T.......",
-            "OTO..ODDOOODDOO.T.......",
-            "OGO..ODDOO.ODDO.........",
-            ".O....OOO...OOO.........",
-            "........................"
+            // Mystical Mage with Staff - Wizardmon-inspired
+            ".............OOO....................",
+            "............OHHHO...................",
+            "...........OHHHHO...................",
+            "..........OHHHHHO...................",
+            ".........OHHLLLHHO..................",
+            "........OHHLLLLHHO..................",
+            ".......OHHHLLLLHHHO.................",
+            "......OHHHHLLLLHHHHO................",
+            ".....OHHHHHLLLLHHHHHO...............",
+            "....OOOOHHHLLLHHHOOOOO..............",
+            "....OSSSSSSSSSSSSSSSO...............",
+            "...OSSSSSQQQQQQQQSSSSO..............",
+            "...OSSSQQQEWWWWESQQSSSO.............",
+            "...OSSSQQSEWEEEWESQQSSO.............",
+            "...OSSSSQSSSSSSSSSQSSSO.............",
+            "...OSSSSPSSSSSSSSPSSSO..............",
+            "....OOSSSSSSSSSSSSOO................",
+            ".....OOOSSSSSSSOOO..................",
+            "..TOOOOOBBBBBBBBOOOOOT..............",
+            ".TTTOOBBBBBBBBBBBBOO.T..............",
+            ".T.TOBBBBLLLLLBBBBBO.T..............",
+            ".T.TOBBBLLLLLLLBBBBO.T..............",
+            ".T.TOBBBLLGGGLLBBBBO.T..............",
+            ".TTOOBBBLLGGGLLBBBBOOT..............",
+            ".TTOOOBBBLLLLLBBBOOOT...............",
+            "OGO...OBBBBBBBBBBOO.T...............",
+            "OGO...OBBBBBBOBBBBBO................",
+            "OGO...OBBBBOOOOBBBBBO...............",
+            "OGO...OBBDDOOOOOODDBO...............",
+            "OGO..ODDDDDO....ODDDDO..............",
+            "OGO..ODDDDDO....ODDDDO..............",
+            "OGO..OMMMMO......OMMMMO.............",
+            ".O...OMMMO........OMMMO.............",
+            ".....OOOO..........OOOO.............",
+            "....................................",
+            "...................................."
         )
         CharacterClass.PALADIN -> listOf(
-            // Holy knight with golden armor - Angemon style purity
-            "........................",
-            ".......OOOOOOOO.........",
-            "......OHHWWWWHHO........",
-            ".....OHHWWGGWWHHO.......",
-            ".....OHWWWGGWWWHO.......",
-            ".....OHWWWWWWWWHO.......",
-            "....OOOSSSSSSSOOO.......",
-            "....OSSSSEWWESSSO.......",
-            "....OSSSSWWWWSSSO.......",
-            "....OSSSSPSSPSSSO.......",
-            ".....OOSSSSSSOOO........",
-            "..OOOOBBBBBBBBOOOO......",
-            ".OLLLOLBBGGBBLOLLO......",
-            ".OLLLOLBGGGGLBOOLLO.....",
-            "OOLLLLOLBBGGBLOOBOO.....",
-            "OOLLLLOLBBBBBLOOAO......",
-            ".OLLLOOBBBBBBBOOO.......",
-            "..OOOOBBOOBBBOO.........",
-            ".....OBBOOOOBBO.........",
-            ".....ODBOO.ODBOO........",
-            "....OLLDOO.OLDDO........",
-            "....OTTTO...OTTTO.......",
-            ".....OOO.....OOO........",
-            "........................"
+            // Holy Paladin with Golden Armor - Angemon-inspired purity
+            "....................................",
+            "...........OOOOOOOOOO...............",
+            "..........OHHHWWWWHHHO..............",
+            ".........OHHWWWWWWWWHHO.............",
+            ".........OHHWWGGGGWWHHO.............",
+            "........OHHWWWGGGGWWWHHO............",
+            "........OHWWWWGGGGWWWWHO............",
+            "........OHWWWWWWWWWWWWHO............",
+            ".......OOOOSSSSSSSSSOOOOO...........",
+            ".......OSSSSSSSSSSSSSSSSO...........",
+            "......OSSSSQQQQQQQQQQSSSSO..........",
+            "......OSSSQSEWWWWWESSQSSSO..........",
+            "......OSSSQSEWEEEWESSQSSSO..........",
+            "......OSSSSSWWWWWWSSSSSSSO..........",
+            "......OSSSSSPSSSSPSSSSSSSO..........",
+            ".......OOSSSSSSSSSSSSOO.............",
+            "........OOOSSSSSSSOOO...............",
+            "...OOOOOOOBBBBBBBBBBOOOOOOO.........",
+            "..OLLLLLOBBBGGGGGGBBBOLLLO..........",
+            "..OLLLLLOBBBGGGGGGBBBOOLLLO.........",
+            ".OOLLLLLOBBBGGGGGGBBBOOLLLLO........",
+            ".OOLLLLLOBBBBGGGGBBBBOOLLLO.........",
+            ".OLLLLLOOBBBBBBBBBBBBOOOOOOO........",
+            "..OOOOOOBBBBBBBBBBBBBBOOOABO........",
+            "......OBBBBBBBBBBBBBBBBOOABO........",
+            "......OBBBBBBBOOBBBBBBBBOOO.........",
+            "......OBBBBBBOOOOBBBBBBBO...........",
+            "......OBBBDDOOOOOOBBBDDBO...........",
+            ".....OLDDDDDOO..OLDDDDDO............",
+            ".....OLDDDDDDO..OLDDDDDO............",
+            ".....OTTTTTTTO..OTTTTTTTO...........",
+            "......OTTTTTTO..OTTTTTTO............",
+            ".......OOOOO......OOOOO.............",
+            "....................................",
+            "....................................",
+            "...................................."
         )
         CharacterClass.DARK_KNIGHT -> listOf(
-            // Dark menacing knight - Devimon style edge but cute
-            "........................",
-            ".......OOOOOOOO.........",
-            "......OHHGGGGHHOO.......",
-            ".....OHHGGRRGGHHO.......",
-            ".....OHHGGRRGGHO........",
-            ".....OHLGGGGGLHO........",
-            "....OOOOSSSSSSOOO.......",
-            "....OSSSSRWWRESSSO......",
-            "....OSSSSRWWRSSSO.......",
-            "....OSSSSPSSPSSSO.......",
-            ".....OOSSSSSSOOO........",
-            "..OOOOBBBBBBBBOOOOO.....",
-            ".OGGGOBBBBBBBBOOGGO.....",
-            ".OOOOBBBDDDBBBBOOOO.....",
-            "....OBBDDDDDDBBBOO......",
-            "....OBBBDDDDBBBBOO......",
-            "....OBBBBBBBBBBOO.......",
-            "....OBBBBOOBBBBOO.......",
-            "....OBBBOOOOBBBO........",
-            "....ODBBO..ODBBO........",
-            "...ODDDDOO.ODDDO........",
-            "...OOLLOO..OOLLO........",
-            "....OOOO....OOOO........",
-            "........................"
+            // Menacing Dark Knight - Devimon-inspired edge but cute
+            "....................................",
+            "...........OOOOOOOOOO...............",
+            "..........OHHHGGGGHHHO..............",
+            ".........OHHGGGGGGGGHHO.............",
+            ".........OHHGGRRRRGGHHHO............",
+            "........OHHGGGRRRRGGGHHO............",
+            "........OHHGGGGGGGGGGGHHO...........",
+            "........OHHLGGGGGGGGGLHO............",
+            ".......OOOOSSSSSSSSOOOOOO...........",
+            ".......OSSSSSSSSSSSSSSSSO...........",
+            "......OSSSSQQQQQQQQQQSSSSO..........",
+            "......OSSSQSGWWWWWGSQSSSSO..........",
+            "......OSSSQSGWRRWWGSQSSSSO..........",
+            "......OSSSSSSWWWWWSSSSSSSO..........",
+            "......OSSSSSPSSSSPSSSSSSSO..........",
+            ".......OOSSSSSSSSSSSSOO.............",
+            "........OOOSSSSSSSOOO...............",
+            "....OOOOOOBBBBBBBBBBOOOOOOO.........",
+            "...OGGGGGOBBBBBBBBBBOGGGGO..........",
+            "...OGGGGOBBBBDDDDBBBBOGGGO..........",
+            "...OOOOOBBBDDDDDDDBBBBOOOO..........",
+            "......OBBBBDDDDDDDBBBBBO............",
+            "......OBBBBBDDDDDBBBBBBBO...........",
+            "......OBBBBBBDDBBBBBBBBO............",
+            "......OBBBBBBBBBBBBBBBO.............",
+            "......OBBBBBBBOOBBBBBBO.............",
+            "......OBBBBBBOOOOBBBBBO.............",
+            "......OBBBDDOOOOOOBDDBO.............",
+            ".....ODDDDDDOO..ODDDDDDO............",
+            ".....ODDDDDDDO..ODDDDDDO............",
+            ".....OLLLLLLO....OLLLLLLO...........",
+            "......OLLLLLO....OLLLLLO............",
+            ".......OOOOO......OOOOO.............",
+            "....................................",
+            "....................................",
+            "...................................."
         )
         CharacterClass.ROGUE -> listOf(
-            // Sneaky rogue with hood and daggers - Impmon style mischief
-            "........................",
-            "........OOOOO...........",
-            ".......OHHHHHOO.........",
-            "......OHHDDDHHO.........",
-            ".....OHHHHDHHHHO........",
-            ".....OHHHHDHHHHO........",
-            "....OHHOOSSSOOHO........",
-            "....OOSSSEWWESSOO.......",
-            "....OSSSSEWWESSSO.......",
-            "....OSSSPSSSPSSO........",
-            ".....OOSSSSSSOO.........",
-            "....OOOBBBBBBOOOO.......",
-            "...OBBBBBBBBBBBBO.......",
-            "..GGOBBBBBBBBBBOGG......",
-            "..GOOBBBDDDBBBOOOO......",
-            "..GOOBBBDDDBBBOO........",
-            "...OOBBBDDDBBBO.........",
-            "....OBBBBOBBBBO.........",
-            "....OBBBOOOOBBO.........",
-            "....ODBBO.ODBBO.........",
-            "...ODDDDOOODDDOO........",
-            "...OTTTOO.OTTTO.........",
-            "....OOOO...OOOO.........",
-            "........................"
+            // Sneaky Rogue with Hood - Impmon-inspired mischief
+            "....................................",
+            "...........OOOOOOO..................",
+            "..........OHHHHHHHOO................",
+            ".........OHHDDDDDDHHO...............",
+            "........OHHHDDDDDDHHO...............",
+            "........OHHHHDDDDHHHHO..............",
+            "........OHHHHHDDHHHHHHO.............",
+            ".......OHHHHHHDDHHHHHHO.............",
+            ".......OHHOOSSSSSSOOHHHO............",
+            "......OHOOSSSSSSSSSSOOHO............",
+            "......OOSSSQQQQQQQQSSSOO............",
+            "......OSSSQSEWWWWESQSSSSO...........",
+            "......OSSSQSEWEEEWESQSSSO...........",
+            "......OSSSSPSSSSSPSSSSSO............",
+            ".......OOSSSSSSSSSSSOOO.............",
+            "........OOOSSSSSSOOOO...............",
+            ".......OOOOBBBBBBBOOOO..............",
+            "......OBBBBBBBBBBBBBBBO.............",
+            ".....OBBBBBBBBBBBBBBBBO.............",
+            "...GGOBBBBBBBBBBBBBBBBOGG...........",
+            "..GGOOBBBBDDDDDBBBBBOOGG............",
+            "..GOOOBBBBDDDDDBBBBOOO..............",
+            "..GOOOBBBBBDDDBBBBBOO...............",
+            "...OOOBBBBBBBBBBBBBOO...............",
+            "......OBBBBBBBBBBBBO................",
+            "......OBBBBBOOBBBBBBO...............",
+            "......OBBBBOOOOBBBBBO...............",
+            "......OBBDDOOOOOBBDDO...............",
+            ".....ODDDDDO....ODDDDDO.............",
+            ".....ODDDDDO....ODDDDDO.............",
+            ".....OTTTTTO....OTTTTTO.............",
+            "......OTTTTO....OTTTTO..............",
+            ".......OOOO......OOOO...............",
+            "....................................",
+            "....................................",
+            "...................................."
         )
         CharacterClass.ARCHER -> listOf(
-            // Forest archer with bow - Robin Hood meets Palmon style
-            "........................",
-            "........OHHOO...........",
-            ".......OLHHLLO..........",
-            "......OHHLLHHHO.........",
-            ".....OHHLLLLHHO.........",
-            ".....OHHLDDHHO..........",
-            "....OOOSSSSSSOOO........",
-            "....OSSSEEWWESSO........",
-            "....OSSSWWWWWSSSO.......",
-            "....OSSSSPSSPSSSO.......",
-            ".....OOSSSSSSOO.........",
-            "...OOOBBBBBBBOOO........",
-            "..TTTOBBBBBBBBOTTT......",
-            ".TTTOBBBLLBBBBOTT.......",
-            "GTTOOBBBLLBBBBOTT.......",
-            "GTOOOBBBLLLBBBOTT.......",
-            "GTOOOBBBLLBBBOOT........",
-            "GTOO.OBBBBBBOOOT........",
-            ".TO..OBBOOBBOO..........",
-            "......ODBOODBO..........",
-            ".....ODDOODDDO..........",
-            ".....OAAOOOAAO..........",
-            "......OOO.OOO...........",
-            "........................"
+            // Forest Archer with Bow - Robin Hood meets Palmon style
+            "....................................",
+            "...........OHHOO....................",
+            "..........OLHHLLO...................",
+            ".........OHHLLHHHO..................",
+            ".........OHHLLLHHO..................",
+            "........OHHHLLLHHHO.................",
+            "........OHHHLLLDDHHO................",
+            "........OHHHLDDDDHHO................",
+            ".......OOOOSSSSSSOOOO...............",
+            ".......OSSSSSSSSSSSSO...............",
+            "......OSSSSQQQQQQQQSSSO.............",
+            "......OSSSQSEWWWWESQSSSO............",
+            "......OSSSQSEWEEEWESQSSO............",
+            "......OSSSSSWWWWWWSSSSO.............",
+            "......OSSSSSPSSSSPSSSSSO............",
+            ".......OOSSSSSSSSSOOO...............",
+            "........OOOSSSSSOOO.................",
+            ".....OOOOBBBBBBBBBOOOO..............",
+            "....TTTTOBBBBBBBBBOTTT..............",
+            "...TTTTOBBBBLLLLBBBOTTT.............",
+            "..GTTTOBBBBLLLLLBBBOTT..............",
+            "..GTTOOBBBBLLLLBBBOTT...............",
+            "..GTTOOBBBBLLLBBBOOT................",
+            "..GTTOO.OBBBBBBBOO.T................",
+            "..GTO...OBBBBBBBO...................",
+            "..TO....OBBBBOOBBBO.................",
+            "........OBBBOOOOBBO.................",
+            "........ODDBOOOOODBO................",
+            ".......ODDDDOO.ODDDDO...............",
+            ".......ODDDDOO.ODDDDO...............",
+            ".......OAAAAO...OAAAAO..............",
+            "........OAAAO...OAAAO...............",
+            ".........OOO.....OOO................",
+            "....................................",
+            "....................................",
+            "...................................."
         )
     }
 }

@@ -442,13 +442,13 @@ fun BattleArena(state: BattleViewModel.BattleState.Fighting) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(top = 20.dp, end = 20.dp)
+                        .padding(top = 16.dp, end = 16.dp)
                 ) {
                     CharacterRenderer(
                         charClass = state.oppClass,
                         animState = oppAnim,
                         modifier = Modifier
-                            .size(120.dp)
+                            .size(140.dp)
                             .scale(scaleX = -1f, scaleY = 1f),
                         showFrame = false
                     )
@@ -458,12 +458,12 @@ fun BattleArena(state: BattleViewModel.BattleState.Fighting) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
-                        .padding(bottom = 20.dp, start = 20.dp)
+                        .padding(bottom = 16.dp, start = 16.dp)
                 ) {
                     CharacterRenderer(
                         charClass = state.myClass,
                         animState = playerAnim,
-                        modifier = Modifier.size(120.dp),
+                        modifier = Modifier.size(140.dp),
                         showFrame = false
                     )
                 }
