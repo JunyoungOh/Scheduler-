@@ -4,38 +4,80 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Simple cute character silhouette -->
-    <group
-        android:translateX="24"
-        android:translateY="24">
-        <!-- Body -->
-        <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M30,50 
-                C30,35 20,25 30,15 
-                C40,5 50,5 60,15 
-                C70,25 60,35 60,50 
-                C60,65 50,70 45,70 
-                C40,70 30,65 30,50 Z" />
-        <!-- Eyes -->
-        <path
-            android:fillColor="#1C1B1F"
-            android:pathData="M36,35 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
-        <path
-            android:fillColor="#1C1B1F"
-            android:pathData="M50,35 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
-        <!-- Blush -->
-        <path
-            android:fillColor="#FFB6C1"
-            android:pathData="M32,42 a5,3 0 1,0 10,0 a5,3 0 1,0 -10,0" />
-        <path
-            android:fillColor="#FFB6C1"
-            android:pathData="M52,42 a5,3 0 1,0 10,0 a5,3 0 1,0 -10,0" />
-        <!-- Mouth -->
-        <path
-            android:fillColor="#1C1B1F"
-            android:pathData="M42,48 Q45,52 48,48"
-            android:strokeWidth="2"
-            android:strokeColor="#1C1B1F" />
-    </group>
+    
+    <!-- Neo-Brutalism Style App Icon - Pocket Arena -->
+    
+    <!-- Background Circle with Bold Border -->
+    <path
+        android:pathData="M54,54m-40,0a40,40 0,1 1,80 0a40,40 0,1 1,-80 0"
+        android:fillColor="#FFE500"/>
+    
+    <path
+        android:pathData="M54,54m-40,0a40,40 0,1 1,80 0a40,40 0,1 1,-80 0"
+        android:strokeWidth="4"
+        android:strokeColor="#000000"
+        android:fillColor="#00000000"/>
+    
+    <!-- Crossed Swords Icon -->
+    <!-- Sword 1 (Left to Right) -->
+    <path
+        android:pathData="M34,34L74,74"
+        android:strokeWidth="6"
+        android:strokeColor="#000000"
+        android:strokeLineCap="round"/>
+    
+    <path
+        android:pathData="M34,34L74,74"
+        android:strokeWidth="4"
+        android:strokeColor="#FF2D78"
+        android:strokeLineCap="round"/>
+    
+    <!-- Sword 1 Handle -->
+    <path
+        android:pathData="M30,30L38,38"
+        android:strokeWidth="8"
+        android:strokeColor="#000000"
+        android:strokeLineCap="round"/>
+    
+    <path
+        android:pathData="M30,30L38,38"
+        android:strokeWidth="5"
+        android:strokeColor="#00BFFF"
+        android:strokeLineCap="round"/>
+    
+    <!-- Sword 2 (Right to Left) -->
+    <path
+        android:pathData="M74,34L34,74"
+        android:strokeWidth="6"
+        android:strokeColor="#000000"
+        android:strokeLineCap="round"/>
+    
+    <path
+        android:pathData="M74,34L34,74"
+        android:strokeWidth="4"
+        android:strokeColor="#FF2D78"
+        android:strokeLineCap="round"/>
+    
+    <!-- Sword 2 Handle -->
+    <path
+        android:pathData="M78,30L70,38"
+        android:strokeWidth="8"
+        android:strokeColor="#000000"
+        android:strokeLineCap="round"/>
+    
+    <path
+        android:pathData="M78,30L70,38"
+        android:strokeWidth="5"
+        android:strokeColor="#00BFFF"
+        android:strokeLineCap="round"/>
+    
+    <!-- Center Star -->
+    <path
+        android:pathData="M54,44L56,52L64,54L56,56L54,64L52,56L44,54L52,52Z"
+        android:fillColor="#000000"/>
+    
+    <path
+        android:pathData="M54,45L55.5,51.5L62,54L55.5,56.5L54,63L52.5,56.5L46,54L52.5,51.5Z"
+        android:fillColor="#FFFFFF"/>
+    
 </vector>
